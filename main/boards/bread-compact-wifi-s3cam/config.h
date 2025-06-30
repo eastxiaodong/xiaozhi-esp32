@@ -301,7 +301,20 @@
 #define DISPLAY_SPI_MODE 0
 #endif
 
-
+#ifdef CONFIG_LCD_ST7789_240X320_7PIN
+#define LCD_TYPE_ST7789_SERIAL
+#define DISPLAY_WIDTH   240
+#define DISPLAY_HEIGHT  320
+#define DISPLAY_MIRROR_X false
+#define DISPLAY_MIRROR_Y false
+#define DISPLAY_SWAP_XY false
+#define DISPLAY_INVERT_COLOR    true
+#define DISPLAY_RGB_ORDER  LCD_RGB_ELEMENT_ORDER_RGB
+#define DISPLAY_OFFSET_X  0
+#define DISPLAY_OFFSET_Y  0
+#define DISPLAY_BACKLIGHT_OUTPUT_INVERT false
+#define DISPLAY_SPI_MODE 3   // 7Pin SPI 屏幕常用 SPI mode 3
+#endif
 // A MCP Test: Control a lamp
 #define LAMP_GPIO GPIO_NUM_18
 
