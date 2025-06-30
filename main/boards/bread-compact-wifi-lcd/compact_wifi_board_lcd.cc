@@ -9,6 +9,7 @@
 #include "lamp_controller.h"
 #include "iot/thing_manager.h"
 #include "led/single_led.h"
+#include "servo_mcp.cc" // 推荐用CMake方式添加源文件，开发调试可直接include
 
 #include <wifi_station.h>
 #include <esp_log.h>
@@ -59,7 +60,9 @@ static const gc9a01_lcd_init_cmd_t gc9107_lcd_init_cmds[] = {
 };
 #endif
  
+#ifndef TAG
 #define TAG "CompactWifiBoardLCD"
+#endif
 
 LV_FONT_DECLARE(font_puhui_16_4);
 LV_FONT_DECLARE(font_awesome_16_4);
@@ -69,6 +72,9 @@ private:
  
     Button boot_button_;
     LcdDisplay* display_;
+
+    // 舵机控制器作为成员变量，保证生命周期
+    ServoMcpController servo_ctrl;
 
     void InitializeSpi() {
         spi_bus_config_t buscfg = {};
@@ -162,8 +168,10 @@ private:
     }
 
 public:
-    CompactWifiBoardLCD() :
-        boot_button_(BOOT_BUTTON_GPIO) {
+    CompactWifiBoardLCD()
+        : boot_button_(BOOT_BUTTON_GPIO),
+          servo_ctrl(GPIO_NUM_9, GPIO_NUM_10) // 左臂 GPIO 9，右臂 GPIO 10 (相连引脚，便于接线)
+    {
         InitializeSpi();
         InitializeLcdDisplay();
         InitializeButtons();
@@ -171,7 +179,6 @@ public:
         if (DISPLAY_BACKLIGHT_PIN != GPIO_NUM_NC) {
             GetBacklight()->RestoreBrightness();
         }
-        
     }
 
     virtual Led* GetLed() override {
