@@ -5,7 +5,7 @@ set(SERVO_DEGREE_MAPPER_SRC
 )
 
 idf_component_register(
-    SRCS "compact_wifi_board_lcd.cc"
+    SRCS "custom_hardware.cc"
          "servo_360.cc"
          "servo_mcp.cc"
          ${SERVO_DEGREE_MAPPER_SRC}
